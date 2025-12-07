@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Minecraft",
+    "package": "com.mojang.minecraft",
+    "icon": "games/minecraft/icon.png",
+    "screenshots": [
+      "games/minecraft/screenshots/img1.jpg",
+      "games/minecraft/screenshots/img2.jpg"
+    ],
+    "videos": [
+      "games/minecraft/videos/trailer.mp4",
+      "games/minecraft/videos/gameplay.mp4"
+    ],
+    "download": "games/minecraft/download.txt",
+    "description": "Fast-paced racing game with awesome cars.",
+    "keywords": ["minecraft","adventurous","speed"],
+    "size": "950MB",
+    "time": "2025-12-07T10:00:00",
+    "filename": "com.minecraft.apk",
+    "trending": true,
+    "recommended": true
+  }
+]
