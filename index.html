@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Game & App Store</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="top-bar">
+    <button id="back-btn">⬅ Back</button>
+    <h1>My Store</h1>
+  </div>
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search games or apps...">
+    <button id="speak-btn">🎤</button>
+  </div>
+</header>
+
+<nav class="category-buttons">
+  <button data-filter="all" class="active">All</button>
+  <button data-filter="games">Games</button>
+  <button data-filter="apps">Apps</button>
+  <button data-filter="trending">Trending</button>
+  <button data-filter="recommended">Recommended</button>
+</nav>
+
+<section class="sorting">
+  <label>Sort By:</label>
+  <select id="sort-select">
+    <option value="time-desc">Newest</option>
+    <option value="time-asc">Oldest</option>
+    <option value="size-asc">Size Low → High</option>
+    <option value="size-desc">Size High → Low</option>
+  </select>
+</section>
+
+<section id="top-carousel">
+  <h2>Top Apps</h2>
+  <div class="carousel-container" id="carousel">
+    <!-- Scrollable top apps -->
+  </div>
+</section>
+
+<main id="item-list">
+  <!-- Dynamic items -->
+</main>
+
+<script src="script.js"></script>
+</body>
+  </html>
