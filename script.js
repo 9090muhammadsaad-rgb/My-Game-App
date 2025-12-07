@@ -32,8 +32,9 @@ function renderCarousel(items) {
       card.className = 'placeholder';
       card.innerText = 'Not Published Yet';
     } else {
+      const iconSrc = (i.icon.endsWith('.png') || i.icon.endsWith('.jpg')) ? i.icon : '';
       card.innerHTML = `
-        <img src="${i.icon}" alt="${i.name}">
+        <img src="${iconSrc}" alt="${i.name}">
         <h4>${i.name}</h4>
         <a href="${i.download && i.download.trim() !== '' ? i.download : '#'}" 
            class="${i.download && i.download.trim() !== '' ? '' : 'disabled'}">
@@ -45,7 +46,7 @@ function renderCarousel(items) {
   });
 }
 
-// Render all items
+// Render all items (games/apps)
 function renderItems(items) {
   const list = document.getElementById('item-list');
   list.innerHTML = '';
@@ -72,8 +73,11 @@ function renderItems(items) {
         class="${i.download && i.download.trim() !== '' ? '' : 'disabled'}">
         ${i.download && i.download.trim() !== '' ? 'Download' : 'Coming Soon'}</a>`;
 
+      // Icon accepts .jpg or .png
+      const iconSrc = (i.icon.endsWith('.png') || i.icon.endsWith('.jpg')) ? i.icon : '';
+
       card.innerHTML = `
-        <img src="${i.icon}" alt="${i.name}">
+        <img src="${iconSrc}" alt="${i.name}">
         <h3>${i.name}</h3>
         <p>${i.description}</p>
         <p>Size: ${i.size || 'N/A'} | Time: ${i.time || 'N/A'}</p>
@@ -86,7 +90,7 @@ function renderItems(items) {
   });
 }
 
-// Search
+// Search functionality
 document.getElementById('search').addEventListener('input', e => {
   const term = e.target.value.toLowerCase();
   const filtered = [...games, ...apps].filter(i =>
@@ -96,7 +100,7 @@ document.getElementById('search').addEventListener('input', e => {
   renderItems(filtered);
 });
 
-// Category filter
+// Category filter buttons
 document.querySelectorAll('.category-buttons button').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.category-buttons button').forEach(b => b.classList.remove('active'));
@@ -137,7 +141,7 @@ function parseSize(s) {
   return num;
 }
 
-// Voice search
+// Voice search button
 document.getElementById('speak-btn').addEventListener('click', () => {
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
   recognition.lang = 'en-US';
@@ -150,7 +154,7 @@ document.getElementById('speak-btn').addEventListener('click', () => {
   }
 });
 
-// Back button
+// Back button scroll to top
 document.getElementById('back-btn').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
