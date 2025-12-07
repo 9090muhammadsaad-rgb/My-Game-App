@@ -7,7 +7,7 @@ fetch('data/trending.txt')
     trendingNames = txt.split('\n').map(t => t.trim());
   });
 
-// Load games and apps JSON
+// Load JSON
 Promise.all([
   fetch('data/games.json').then(r => r.json()),
   fetch('data/apps.json').then(r => r.json())
@@ -28,22 +28,24 @@ function renderCarousel(items) {
     card.className = 'item-card';
     card.style.width = '180px';
     
-    if (!i.icon || !i.download || !i.description) {
+    if (!i.icon || !i.description) {
       card.className = 'placeholder';
       card.innerText = 'Not Published Yet';
     } else {
       card.innerHTML = `
         <img src="${i.icon}" alt="${i.name}">
         <h4>${i.name}</h4>
-        <a href="${i.download}" target="_blank">Download</a>
+        <a href="${i.download && i.download.trim() !== '' ? i.download : '#'}" 
+           class="${i.download && i.download.trim() !== '' ? '' : 'disabled'}">
+           ${i.download && i.download.trim() !== '' ? 'Download' : 'Coming Soon'}
+        </a>
       `;
     }
-    
     carousel.appendChild(card);
   });
 }
 
-// Render all items (games/apps)
+// Render all items
 function renderItems(items) {
   const list = document.getElementById('item-list');
   list.innerHTML = '';
@@ -51,45 +53,40 @@ function renderItems(items) {
   items.forEach(i => {
     const card = document.createElement('div');
 
-    // Check mandatory fields
-    if (!i.icon || !i.download || !i.description) {
+    if (!i.icon || !i.description) {
       card.className = 'placeholder';
       card.innerText = 'Not Published Yet';
     } else {
       card.className = 'item-card';
 
-      // Screenshots (optional)
-      let screenshotsHTML = '';
-      if (i.screenshots && i.screenshots.length > 0) {
-        screenshotsHTML = '<div class="screenshots">' +
-          i.screenshots.map(img => `<img src="${img}" width="80" height="80">`).join('') +
-          '</div>';
-      }
+      // Screenshots
+      const screenshotsHTML = i.screenshots?.length > 0 ? 
+        '<div class="screenshots">' + i.screenshots.map(img=>`<img src="${img}" width="80" height="80">`).join('') + '</div>' : '';
 
-      // Videos (optional)
-      let videosHTML = '';
-      if (i.videos && i.videos.length > 0) {
-        videosHTML = '<div class="videos">' +
-          i.videos.map(video => `<video controls width="200"><source src="${video}" type="video/mp4"></video>`).join('') +
-          '</div>';
-      }
+      // Videos
+      const videosHTML = i.videos?.length > 0 ?
+        '<div class="videos">' + i.videos.map(v=>`<video controls width="200"><source src="${v}" type="video/mp4"></video>`).join('') + '</div>' : '';
+
+      // Download button
+      const downloadHTML = `<a href="${i.download && i.download.trim() !== '' ? i.download : '#'}" 
+        class="${i.download && i.download.trim() !== '' ? '' : 'disabled'}">
+        ${i.download && i.download.trim() !== '' ? 'Download' : 'Coming Soon'}</a>`;
 
       card.innerHTML = `
         <img src="${i.icon}" alt="${i.name}">
         <h3>${i.name}</h3>
         <p>${i.description}</p>
-        <p>Size: ${i.size} | Time: ${i.time}</p>
+        <p>Size: ${i.size || 'N/A'} | Time: ${i.time || 'N/A'}</p>
         ${screenshotsHTML}
         ${videosHTML}
-        <a href="${i.download}" target="_blank">Download</a>
+        ${downloadHTML}
       `;
     }
-
     list.appendChild(card);
   });
 }
 
-// Search functionality
+// Search
 document.getElementById('search').addEventListener('input', e => {
   const term = e.target.value.toLowerCase();
   const filtered = [...games, ...apps].filter(i =>
@@ -99,7 +96,7 @@ document.getElementById('search').addEventListener('input', e => {
   renderItems(filtered);
 });
 
-// Category filter buttons
+// Category filter
 document.querySelectorAll('.category-buttons button').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.category-buttons button').forEach(b => b.classList.remove('active'));
@@ -130,17 +127,17 @@ document.getElementById('sort-select').addEventListener('change', e => {
   renderItems(items);
 });
 
-// Helper function to parse size string like "150MB"
+// Parse size like "150MB"
 function parseSize(s) {
   if (!s) return 0;
   const num = parseFloat(s);
-  if (s.toLowerCase().includes('kb')) return num / 1024;
+  if (s.toLowerCase().includes('kb')) return num/1024;
   if (s.toLowerCase().includes('mb')) return num;
-  if (s.toLowerCase().includes('gb')) return num * 1024;
+  if (s.toLowerCase().includes('gb')) return num*1024;
   return num;
 }
 
-// Voice search button
+// Voice search
 document.getElementById('speak-btn').addEventListener('click', () => {
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
   recognition.lang = 'en-US';
@@ -153,7 +150,7 @@ document.getElementById('speak-btn').addEventListener('click', () => {
   }
 });
 
-// Back button scroll to top
+// Back button
 document.getElementById('back-btn').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
